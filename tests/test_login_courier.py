@@ -21,7 +21,7 @@ class TestLoginCourier:
 
     @allure.title('Проверка невозможности входа при вводе неверного логина')
     @allure.description('Осуществляется вход с изменённым логином, проверяется статус-код')
-    def test_login_wrong_password(self):
+    def test_login_wrong_login(self):
         response = ApiMethods.login_courier(f"{self.login_cls}123", self.password_cls)
         assert response.status_code == 404 and response.json()['message'] == Data.CODE_404
 
@@ -33,13 +33,13 @@ class TestLoginCourier:
 
     @allure.title('Проверка невозможности входа без заполнения обязательного поля')
     @allure.description("Осуществляется вход в аккаунт без пароля")
-    def test_login_without_required_field(self):
-        response = requests.post(url=Urls.login_api, json={"login": self.login_cls})
+    def test_login_without_password(self):
+        response = requests.post(url=Urls.login_api, json={"login": self.login_cls, "password": ''})
         assert response.status_code == 400 and response.json()['message'] == Data.CODE_400_login
 
     @allure.title('Проверка невозможности входа без заполнения обязательного поля')
     @allure.description("Осуществляется вход в аккаунт без логина")
-    def test_login_without_required_field(self):
+    def test_login_without_login(self):
         response = requests.post(url=Urls.login_api, json={"password": self.password_cls})
         assert response.status_code == 400 and response.json()['message'] == Data.CODE_400_login
 
